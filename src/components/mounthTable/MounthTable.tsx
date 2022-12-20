@@ -1,30 +1,8 @@
 import React from "react";
+import { header, months } from "../data/moutnTableData";
 import TableInput from "../TableInput/TableInput";
 
 const MounthTable = () => {
-   const months = [
-      "Январь",
-      "Февраль",
-      "Март",
-      "Апрель",
-      "Май",
-      "Июнь",
-      "Июль",
-      "Август",
-      "Сентябрь",
-      "Октбярь",
-      "Ноябрь",
-      "Декабрь",
-   ];
-
-   const header = [
-      "месяцы",
-      "Выработка электроэнергии, млн. кВтч",
-      "Выдаваемая мощность, МВт",
-      "Отпуск тепла, тыс. Гкал",
-      "Теплопроизводительность, т/ч",
-   ];
-
    const renderString = (string: number, columns: number, dataType: number) => {
       const res = [];
 

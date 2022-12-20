@@ -1,26 +1,9 @@
 import React, { useState } from "react";
+import { header } from "../data/boilersTableData";
 import TableInput from "../TableInput/TableInput";
 
 const BoilersTable = () => {
-   // const boilers = [
-   //    "Котел ст. № 3",
-   //    "Котел ст. № 4",
-   //    "Котел ст. № 5",
-   //    "Котел ст. № 6",
-   //    "Котел ст. № 7",
-   //    "Котел ст. № 8",
-   //    "Котел ст. № 9",
-   //    "Котел ст. № 10",
-   // ];
-
    const [strNum, setStrNum] = useState<number>(1);
-
-   const header = [
-      "Новосибирская ТЭЦ-2, станционный номер котла",
-      "Марка котла",
-      "Номинальная максимальная производительность, т/ч",
-      "Число пусков сначала эксплуатации",
-   ];
 
    const renderStrings = (columnsNum: number, dataType: number) => {
       const res = [];

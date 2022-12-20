@@ -1,6 +1,11 @@
 import React, { FC, useState } from "react";
 import "./App.css";
 import BoilersTable from "./components/BoilersTable/BoilersTable";
+import {
+   offSeasonMonthNumbers,
+   summerMonthNumbers,
+   winterMonthNumbers,
+} from "./components/data/seasons";
 import EquipmentCard from "./components/equipmentCard/EquipmentCard";
 import Header from "./components/header/Header";
 import MounthTable from "./components/mounthTable/MounthTable";
@@ -10,36 +15,44 @@ import { useTypedSelector } from "./hooks/useTypedSelector";
 const App: FC = () => {
    const months = useTypedSelector((state) => state.yearTaskSlice.data);
    const boilers = useTypedSelector((state) => state.yearTaskSlice.boilers);
-   const [boilerIndexes, setboilerIndexes] = useState<number[]>([]);
+   const [winterBoilerIndexes, setWinterBoilerIndexes] = useState<number[]>([]);
+   const [summberBoilerIndexes, setSummberBoilerIndexes] = useState<number[]>(
+      []
+   );
+   const [offSeasonBoilerIndexes, setOffSeasonBoilerIndexes] = useState<
+      number[]
+   >([]);
 
-   const combinationGenerator = (numberLength: number, averagePperformance: number) => {
-      const start = Number("1" + Array(numberLength).join("0"));
+   const selectionOfBoilers = (
+      boilersAmount: number,
+      averagePperformance: number
+   ) => {
+      const start = Number("1" + Array(boilersAmount).join("0"));
       const end = start * 10 - 1;
 
-      // let result = 0;
       let result: number[] = [];
-      let minDif = Infinity; 
+      let minDif = Infinity;
 
       for (let i = start; i < end; i++) {
          const set = new Set();
-         const array = ("" + i).split("").map(Number);
-         array.forEach((item) => set.add(item));
-
-         if (set.size === numberLength) {
+         const boilerNumbers = ("" + i).split("").map(Number);
+         boilerNumbers.forEach((item) => set.add(item));
+         
+         if (set.size === boilersAmount) {
             let curSum = 0;
 
-            array.forEach((item) => {
-               if (boilers[item -1]) {
-                  curSum += boilers[item-1].perfomance
-               }  
+            boilerNumbers.forEach((item) => {
+               if (boilers[item - 1]) {
+                  curSum += boilers[item - 1].perfomance;
+               }
             });
 
-            if (curSum > averagePperformance) {
+            if (curSum >= averagePperformance) {
                let curDif = Math.abs(curSum - averagePperformance);
 
                if (curDif < minDif) {
-                  minDif = curDif
-                  result = array;
+                  minDif = curDif;
+                  result = boilerNumbers;
                }
             }
          }
@@ -49,29 +62,50 @@ const App: FC = () => {
          return result;
       }
 
-
       return null;
    };
 
-   const calcEquipment = () => {
-      const averagePperformance =
-         (months[0].heatOutput +
-            months[1].heatOutput +
-            months[2].heatOutput +
-            months[10].heatOutput +
-            months[11].heatOutput) /
-         5;
+   const calcSeasonBoilers = (monthNumbers: number[]) => {
+      let averagePerformance = 0;
 
-      let cobmination: number[] | null = [];
+      monthNumbers.forEach(
+         (number) => (averagePerformance += months[number].heatOutput)
+      );
 
-      for (let i = 1; i < boilers.length; i++) {
-         cobmination = combinationGenerator(i, averagePperformance);
+      averagePerformance = averagePerformance / winterMonthNumbers.length;
 
-         if (cobmination) {
-            setboilerIndexes(cobmination);
-            break;
+      let boilersCobmination: number[] | null = [];
+
+      for (
+         let curBoilersAmount = 1;
+         curBoilersAmount < boilers.length;
+         curBoilersAmount++
+      ) {
+         boilersCobmination = selectionOfBoilers(curBoilersAmount, averagePerformance);
+
+         if (boilersCobmination) {
+            return boilersCobmination;
          }
+      }
+   };
 
+   const calcBoilers = () => {
+      const winterBoilers = calcSeasonBoilers(winterMonthNumbers);
+
+      if (winterBoilers) {
+         setWinterBoilerIndexes(winterBoilers);
+      }
+
+      const summerBoilers = calcSeasonBoilers(summerMonthNumbers);
+
+      if (summerBoilers) {
+         setSummberBoilerIndexes(summerBoilers);
+      }
+
+      const offSeasonBoilers = calcSeasonBoilers(offSeasonMonthNumbers);
+
+      if (offSeasonBoilers) {
+         setOffSeasonBoilerIndexes(offSeasonBoilers);
       }
    };
 
@@ -87,11 +121,22 @@ const App: FC = () => {
             <TurbinesTable />
             <BoilersTable />
 
-            <button className="button" onClick={calcEquipment}>
+            <button className="button" onClick={calcBoilers}>
                Рассчитать количество оборудования
             </button>
-
-            {boilerIndexes.map(index => <EquipmentCard boiler={boilers[index - 1]}/>)}
+            <h2>Котлы</h2>
+            <h2>Зима</h2>
+            {winterBoilerIndexes.map((index) => (
+               <EquipmentCard boiler={boilers[index - 1]} />
+            ))}
+            <h2>Лето</h2>
+            {summberBoilerIndexes.map((index) => (
+               <EquipmentCard boiler={boilers[index - 1]} />
+            ))}
+            <h2>Межсезонье</h2>
+            {offSeasonBoilerIndexes.map((index) => (
+               <EquipmentCard boiler={boilers[index - 1]} />
+            ))}
          </div>
       </div>
    );

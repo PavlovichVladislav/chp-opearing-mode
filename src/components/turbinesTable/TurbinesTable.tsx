@@ -1,16 +1,9 @@
 import { useState } from "react";
+import { header } from "../data/turbinesTableData";
 import TableInput from "../TableInput/TableInput";
 
 const TurbinesTable = () => {
    const [strNum, setStrNum] = useState<number>(1);
-
-   const header = [
-      "Стационарный номер агрегата",
-      "Тип (марка)турбины",
-      "установленная электрическая мощность",
-      "Тепловая мощность Гкал/час",
-      "Выработка электроэнергии в отчётном",
-   ];
 
    const renderStrings = (columnsNum: number, dataType: number) => {
       const res = [];
