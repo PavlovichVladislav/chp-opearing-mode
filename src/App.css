@@ -59,16 +59,16 @@ h1 {
 }
 
 .button {
-   margin-top: 5px;
-   height: 48px;
+   margin-top: 10px;
+   height: 46px;
    display: inline-block;
    text-decoration: none;
    font-size: 16px;
    color: #fff;
    background-color: #366af3;
-   padding: 8px 16px;
+   padding: 6px 14px;
    border: 2px solid #366af3;
-   border-radius: 32px;
+   border-radius: 22px;
    cursor: pointer;
 }
 
@@ -101,10 +101,11 @@ h1 {
 }
 
 .header__btns {
-   min-width: 221px;
    display: flex;
-   column-gap: 10px;
-   justify-content: space-between;
+   column-gap: 20px;
+   width: 100%;
+   justify-content: center;
+   align-items: center;
 }
 
 .header__btns_auth {
@@ -147,4 +148,34 @@ h1 {
 
 .card__container {
    padding: 2px 16px;
+}
+
+.link {
+   color: #222222;
+   font-size: 17px;
+   font-weight: 600;
+   text-decoration: none;
+}
+
+.link:hover, .active {
+   color: #f03b36;
+}
+
+.title {
+   color: #222222;
+   font-size: 22px;
+   font-weight: 700;
+}
+
+.mt-20 {
+   margin-top: 20px;
+}
+
+.subtitle {
+   padding-left: 10px;
+   margin: 0;
+   margin-top: 40px;
+   color: #222222;
+   font-size: 20px;
+   font-weight: 600;
 }

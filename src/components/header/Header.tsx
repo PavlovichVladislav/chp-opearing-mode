@@ -7,11 +7,11 @@ const Header = () => {
             <div className="container">
                <div className="header__wrapper">
                   <div className="header__btns">
-                     <button className="button">Опт. состав оборудования</button>
-                     <button className="button">ХОП</button>
-                     <button className="button">Предельные издержки</button>
-                     <button className="button">Предельные доходы станции</button>
-                     <button className="button">Опт. электрические мощности</button>
+                     <a href="#" className="link active">Опт. состав оборудования</a>
+                     <a href="#" className="link">ХОП</a>
+                     <a href="#" className="link">Предельные издержки</a>
+                     <a href="#" className="link">Предельные доходы станции</a>
+                     <a href="#" className="link">Опт. электрические мощности</a>
                   </div>
                </div>
             </div>

@@ -55,6 +55,7 @@ const TurbinesTable = () => {
 
    return (
       <div>
+         <h2 className="subtitle" >Турбины</h2>
          {renderTable(header, 2)}
          <button className="button" onClick={() => setStrNum(strNum + 1)}>Добавить строку</button>
       </div>

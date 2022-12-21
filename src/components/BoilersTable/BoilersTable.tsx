@@ -55,6 +55,7 @@ const BoilersTable = () => {
 
    return (
       <div>
+         <h2 className="subtitle" >Бойлеры</h2>
          {renderTable(header, 3)}
          <button className="button" onClick={() => setStrNum(strNum + 1)}>Добавить строку</button>
       </div>

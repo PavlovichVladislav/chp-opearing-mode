@@ -10,7 +10,7 @@ const EquipmentCard: FC<EquipmentCardProps> = ({boiler}) => {
       <div className="card">
          <div className="card__container">
             <h4>
-               <b>{boiler.name}, марка турбины: {boiler.type}</b>
+               <b>{boiler.name}, марка котла: {boiler.type}</b>
             </h4>
             <p>Теплопроизводительность: {boiler.perfomance} т/ч</p>
          </div>

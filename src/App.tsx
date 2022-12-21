@@ -113,7 +113,7 @@ const App: FC = () => {
       <div className="App">
          <Header />
          <div className="container">
-            <h1>
+            <h1 className="title" >
                Выполнение годового задания по производству электрической и
                тепловой энергии по месяцам года
             </h1>
@@ -124,16 +124,16 @@ const App: FC = () => {
             <button className="button" onClick={calcBoilers}>
                Рассчитать количество оборудования
             </button>
-            <h2>Котлы</h2>
-            <h2>Зима</h2>
+            <h2 className="title">Котлы</h2>
+            {winterBoilerIndexes.length > 0 && <h2 className="subtitle">Зима</h2>}
             {winterBoilerIndexes.map((index) => (
                <EquipmentCard boiler={boilers[index - 1]} />
             ))}
-            <h2>Лето</h2>
+            {summberBoilerIndexes.length > 0 && <h2 className="subtitle">Лето</h2>}
             {summberBoilerIndexes.map((index) => (
                <EquipmentCard boiler={boilers[index - 1]} />
             ))}
-            <h2>Межсезонье</h2>
+            {offSeasonBoilerIndexes.length > 0 && <h2 className="subtitle">Межсезонье</h2>}
             {offSeasonBoilerIndexes.map((index) => (
                <EquipmentCard boiler={boilers[index - 1]} />
             ))}
@@ -143,3 +143,4 @@ const App: FC = () => {
 };
 
 export default App;
+
