@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { IBoiler } from "../../models/boiler";
 
 interface EquipmentCardProps {
-    boiler: IBoiler;
+   boiler: IBoiler;
  }
 
 const EquipmentCard: FC<EquipmentCardProps> = ({boiler}) => {

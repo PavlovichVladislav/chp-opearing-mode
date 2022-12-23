@@ -1,4 +1,3 @@
-import React from "react";
 import { header, months } from "../data/moutnTableData";
 import TableInput from "../TableInput/TableInput";
 

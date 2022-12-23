@@ -1,0 +1,49 @@
+.table {
+   margin: 0 auto;
+   margin-top: 15px;
+   width: 100%;
+   border: 1px solid #dddddd;
+   border-collapse: collapse;
+}
+
+.table th {
+   padding: 5px;
+   background: #e2e2e2;
+   border: 1px solid #858585;
+   color: #222222;
+   font-weight: 700;
+   text-align: center;
+}
+
+.table td {
+   padding: 0;
+   border: 1px solid #858585;
+   font-weight: 400;
+   color: #222222;
+   text-align: left;
+}
+
+.table td:first-child {
+   padding: 5px;
+}
+
+.table_string td:first-child {
+   padding: 0px;
+}
+
+.table input {
+   padding: 0;
+   padding: 5px 10px;
+   width: calc(100% - 22px);
+   height: 20px;
+   outline: 0;
+   border: none;
+   font-weight: 400;
+   font-size: 16px;
+   color: #222222;
+   background: #ffffff;
+}
+
+.table input:focus {
+   border: 1px solid #1874cf;
+}
