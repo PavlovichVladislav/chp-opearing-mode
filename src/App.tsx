@@ -1,11 +1,15 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
+
 import "./App.css";
+
 import BoilersTable from "./components/BoilersTable/BoilersTable";
+
 import {
    offSeasonMonthNumbers,
    summerMonthNumbers,
    winterMonthNumbers,
-} from "./components/data/seasons";
+} from "./data/seasons";
+
 import EquipmentCard from "./components/equipmentCard/EquipmentCard";
 import TurbineCard from "./components/equipmentCard/Turbine.Card";
 import Header from "./components/header/Header";
@@ -14,9 +18,11 @@ import TurbinesTable from "./components/turbinesTable/TurbinesTable";
 import { useTypedSelector } from "./hooks/useTypedSelector";
 
 const App: FC = () => {
+   // общий селектор
    const months = useTypedSelector((state) => state.yearTaskSlice.data);
    const boilers = useTypedSelector((state) => state.yearTaskSlice.boilers);
    const turbines = useTypedSelector((state) => state.yearTaskSlice.turbines);
+
    const [winterBoilerIndexes, setWinterBoilerIndexes] = useState<number[]>([]);
    const [summberBoilerIndexes, setSummberBoilerIndexes] = useState<number[]>(
       []
@@ -233,6 +239,7 @@ const App: FC = () => {
             <button className="button" onClick={calcEquipment}>
                Рассчитать количество оборудования
             </button>
+
             <div className="equipmentWrapper">
                <div className="boilers">
                   <h2 className="title">Котлы</h2>
