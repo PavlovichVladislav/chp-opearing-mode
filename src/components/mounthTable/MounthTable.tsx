@@ -2,13 +2,13 @@ import { header, months } from "../../data/moutnTableData";
 import TableInput from "../TableInput/TableInput";
 
 const MounthTable = () => {
-   const renderRow = (rowNumber: number, columnsNumber: number, dataType: number) => {
+   const renderRow = (rowNumber: number, columnsNumber: number) => {
       const row = [];
 
       for (let i = 1; i < columnsNumber; i++) {
          row.push(
             <td key={i}>
-               <TableInput monthNumber={rowNumber} valueType={i} dataType={dataType} />
+               <TableInput rowNumber={rowNumber} columnNumber={i} tableName="months" />
             </td>
          );
       }
@@ -16,16 +16,16 @@ const MounthTable = () => {
       return row;
    };
 
-   const renderRows = (rowNames: string[], columnsNumber: number, dataType: number) => {
+   const renderRows = (rowNames: string[], columnsNumber: number) => {
       return rowNames.map((rowName, i) => (
          <tr key={i}>
             <td>{rowName}</td>
-            {renderRow(i, columnsNumber, dataType)}
+            {renderRow(i, columnsNumber)}
          </tr>
       ));
    };
 
-   const renderTable = (rowNames: string[], columnNames: string[], dataType: number) => {
+   const renderTable = (rowNames: string[], columnNames: string[]) => {
       return (
          <table className="table">
             <thead>
@@ -35,12 +35,12 @@ const MounthTable = () => {
                   ))}
                </tr>
             </thead>
-            <tbody>{renderRows(rowNames, columnNames.length, dataType)}</tbody>
+            <tbody>{renderRows(rowNames, columnNames.length)}</tbody>
          </table>
       );
    };
 
-   return <>{renderTable(months, header, 1)}</>;
+   return <>{renderTable(months, header)}</>;
 };
 
 export default MounthTable;

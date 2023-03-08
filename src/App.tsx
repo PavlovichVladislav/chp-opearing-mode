@@ -19,7 +19,7 @@ import { useTypedSelector } from "./hooks/useTypedSelector";
 
 const App: FC = () => {
    // общий селектор
-   const months = useTypedSelector((state) => state.yearTaskSlice.data);
+   const months = useTypedSelector((state) => state.yearTaskSlice.monthsTableData);
    const boilers = useTypedSelector((state) => state.yearTaskSlice.boilers);
    const turbines = useTypedSelector((state) => state.yearTaskSlice.turbines);
 

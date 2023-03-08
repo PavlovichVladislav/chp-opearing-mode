@@ -3,19 +3,19 @@ import { ITaskItem } from "../../../models/taskItem";
 import { ITurbine } from "../../../models/turbine";
 
 export interface YearTaskState {
-    data: ITaskItem[];
+    monthsTableData: ITaskItem[];
     turbines: ITurbine[];
     boilers: IBoiler[];
 }
 
 export interface setTableValuePayload {
-    index: number;
+    rowNumber: number;
     value: number;
-    valueType: number;
+    columnNumber: number;
 }
 
 export interface setStringNamePayload {
     index: number;
     value: string;
-    valueType: number;
+    columnNumber: number;
 }

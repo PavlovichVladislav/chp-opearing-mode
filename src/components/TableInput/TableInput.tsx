@@ -3,44 +3,44 @@ import { useDispatch } from "react-redux";
 import {
    setBoilerName,
    setBoilerValue,
-   setTableValue,
+   setMonthsTableValue,
    setTurbineName,
    setTurbineValue,
 } from "../../store/slices/yearTaskSlice";
 
 interface TableInputProps {
-   monthNumber: number;
-   valueType: number;
-   dataType: number;
+   rowNumber: number;
+   columnNumber: number;
+   tableName: string;
 }
 
 const TableInput: FC<TableInputProps> = ({
-   monthNumber,
-   valueType,
-   dataType,
+   rowNumber,
+   columnNumber,
+   tableName,
 }) => {
    const [value, setValue] = useState("");
    const dispatch = useDispatch();
 
    useEffect(() => {
-      switch (dataType) {
-         case 1: {
+      switch (tableName) {
+         case "months": {
             dispatch(
-               setTableValue({
-                  index: monthNumber,
+               setMonthsTableValue({
+                  rowNumber: rowNumber,
                   value: Number(value),
-                  valueType,
+                  columnNumber,
                })
             );
             break;
          }
-         case 2: {
-            if (valueType === 0 || valueType === 1) {
+         case "turbines": {
+            if (columnNumber === 0 || columnNumber === 1) {
                dispatch(
                   setTurbineName({
-                     index: monthNumber,
+                     index: rowNumber,
                      value: value,
-                     valueType,
+                     columnNumber,
                   })
                );
                break;
@@ -48,20 +48,20 @@ const TableInput: FC<TableInputProps> = ({
 
             dispatch(
                setTurbineValue({
-                  index: monthNumber,
+                  rowNumber: rowNumber,
                   value: Number(value),
-                  valueType,
+                  columnNumber,
                })
             );
             break;
          }
-         case 3: {
-            if (valueType === 0 || valueType === 1) {
+         case "boilers": {
+            if (columnNumber === 0 || columnNumber === 1) {
                dispatch(
                   setBoilerName({
-                     index: monthNumber,
+                     index: rowNumber,
                      value: value,
-                     valueType,
+                     columnNumber,
                   })
                );
                break;
@@ -69,9 +69,9 @@ const TableInput: FC<TableInputProps> = ({
 
             dispatch(
                setBoilerValue({
-                  index: monthNumber,
+                  rowNumber: rowNumber,
                   value: Number(value),
-                  valueType,
+                  columnNumber,
                })
             );
             break;

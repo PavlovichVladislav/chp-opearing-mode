@@ -9,23 +9,23 @@ const BoilersTable = () => {
       setRowsNumber((rowsNumber) => rowsNumber + 1);
    };
 
-   const renderRows = (columnsNumber: number, dataType: number) => {
+   const renderRows = (columnsNumber: number) => {
       const rows = [];
 
       for (let i = 0; i < rowNumber; i++) {
-         rows.push(<tr key={i}>{renderRow(i, columnsNumber, dataType)}</tr>);
+         rows.push(<tr key={i}>{renderRow(i, columnsNumber)}</tr>);
       }
 
       return rows;
    };
 
-   const renderRow = (rowNumber: number, columnsNumber: number, dataType: number) => {
+   const renderRow = (rowNumber: number, columnsNumber: number) => {
       const row = [];
 
       for (let i = 0; i < columnsNumber; i++) {
          row.push(
             <td key={i}>
-               <TableInput monthNumber={rowNumber} valueType={i} dataType={dataType} />
+               <TableInput rowNumber={rowNumber} columnNumber={i} tableName="boilers" />
             </td>
          );
       }
@@ -33,7 +33,7 @@ const BoilersTable = () => {
       return row;
    };
 
-   const renderTable = (columns: string[], dataType: number) => {
+   const renderTable = (columns: string[]) => {
       return (
          <table className="table table_string">
             <thead>
@@ -43,7 +43,7 @@ const BoilersTable = () => {
                   ))}
                </tr>
             </thead>
-            <tbody>{renderRows(columns.length, dataType)}</tbody>
+            <tbody>{renderRows(columns.length)}</tbody>
          </table>
       );
    };
@@ -51,7 +51,7 @@ const BoilersTable = () => {
    return (
       <>
          <h2 className="subtitle">Бойлеры</h2>
-         {renderTable(header, 3)}
+         {renderTable(header)}
          <button className="button" onClick={addRow}>
             Добавить строку
          </button>
