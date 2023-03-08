@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { IBoiler } from "../../models/boiler";
+import { FC } from "react";
+import { IBoiler } from "../../models/tableDataModels"; 
 
 interface EquipmentCardProps {
    boiler: IBoiler;

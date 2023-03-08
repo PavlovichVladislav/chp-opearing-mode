@@ -1,6 +1,4 @@
-import { IBoiler } from "../../../models/boiler";
-import { ITaskItem } from "../../../models/taskItem";
-import { ITurbine } from "../../../models/turbine";
+import { ITaskItem, IBoiler, ITurbine } from "../../../models/tableDataModels";
 
 export interface YearTaskState {
     monthsTableData: ITaskItem[];
@@ -10,12 +8,6 @@ export interface YearTaskState {
 
 export interface setTableValuePayload {
     rowNumber: number;
-    value: number;
-    columnNumber: number;
-}
-
-export interface setStringNamePayload {
-    index: number;
-    value: string;
+    value: number | string;
     columnNumber: number;
 }

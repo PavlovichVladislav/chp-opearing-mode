@@ -44,6 +44,6 @@
    background: #ffffff;
 }
 
-.table input:focus {
+.table td:has(input:focus) {
    border: 1px solid #1874cf;
 }

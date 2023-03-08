@@ -1,10 +1,8 @@
 import React, { FC, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
-   setBoilerName,
    setBoilerValue,
    setMonthsTableValue,
-   setTurbineName,
    setTurbineValue,
 } from "../../store/slices/yearTaskSlice";
 
@@ -14,11 +12,7 @@ interface TableInputProps {
    tableName: string;
 }
 
-const TableInput: FC<TableInputProps> = ({
-   rowNumber,
-   columnNumber,
-   tableName,
-}) => {
+const TableInput: FC<TableInputProps> = ({ rowNumber, columnNumber, tableName }) => {
    const [value, setValue] = useState("");
    const dispatch = useDispatch();
 
@@ -35,56 +29,33 @@ const TableInput: FC<TableInputProps> = ({
             break;
          }
          case "turbines": {
-            if (columnNumber === 0 || columnNumber === 1) {
-               dispatch(
-                  setTurbineName({
-                     index: rowNumber,
-                     value: value,
-                     columnNumber,
-                  })
-               );
-               break;
-            }
-
             dispatch(
                setTurbineValue({
                   rowNumber: rowNumber,
-                  value: Number(value),
+                  value,
                   columnNumber,
                })
             );
             break;
          }
          case "boilers": {
-            if (columnNumber === 0 || columnNumber === 1) {
-               dispatch(
-                  setBoilerName({
-                     index: rowNumber,
-                     value: value,
-                     columnNumber,
-                  })
-               );
-               break;
-            }
-
             dispatch(
                setBoilerValue({
                   rowNumber: rowNumber,
-                  value: Number(value),
+                  value,
                   columnNumber,
                })
             );
             break;
          }
       }
+      // eslint-disable-next-line
    }, [value]);
 
    return (
       <input
          value={value}
-         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setValue(e.target.value)
-         }
+         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
       />
    );
 };

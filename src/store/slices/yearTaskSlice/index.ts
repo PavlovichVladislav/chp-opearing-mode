@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { setStringNamePayload, setTableValuePayload, YearTaskState } from "./types";
-import { ITaskItem } from "../../../models/taskItem";
-import { ITurbine } from "../../../models/turbine";
-import { IBoiler } from "../../../models/boiler";
+import { setTableValuePayload, YearTaskState } from "./types";
+import { ITaskItem, IBoiler, ITurbine } from "../../../models/tableDataModels";
 
 const initialState: YearTaskState = {
    monthsTableData: Array(12).map(function () {
@@ -32,116 +31,34 @@ export const yearTaskSlice = createSlice({
          };
       },
       setTurbineValue: (state, action: PayloadAction<setTableValuePayload>) => {
-         switch (action.payload.columnNumber) {
-            case 0:
-               state.turbines[action.payload.rowNumber] = {
-                  ...state.turbines[action.payload.rowNumber],
-                  name: String(action.payload.value),
-               };
-               break;
-            case 1:
-               state.turbines[action.payload.rowNumber] = {
-                  ...state.turbines[action.payload.rowNumber],
-                  type: String(action.payload.value),
-               };
-               break;
-            case 2:
-               state.turbines[action.payload.rowNumber] = {
-                  ...state.turbines[action.payload.rowNumber],
-                  electricityPower: action.payload.value,
-               };
-               break;
-            case 3:
-               state.turbines[action.payload.rowNumber] = {
-                  ...state.turbines[action.payload.rowNumber],
-                  thermalPower: action.payload.value,
-               };
-               break;
-            case 4:
-               state.turbines[action.payload.rowNumber] = {
-                  ...state.turbines[action.payload.rowNumber],
-                  powerGeneration: action.payload.value,
-               };
-               break;
-            default:
-               break;
-         }
-      },
-      setTurbineName: (state, action: PayloadAction<setStringNamePayload>) => {
-         switch (action.payload.columnNumber) {
-            case 0:
-               state.turbines[action.payload.index] = {
-                  ...state.turbines[action.payload.index],
-                  name: action.payload.value,
-               };
-               break;
-            case 1:
-               state.turbines[action.payload.index] = {
-                  ...state.turbines[action.payload.index],
-                  type: action.payload.value,
-               };
-               break;
-            default:
-               break;
-         }
+         const { columnNumber, rowNumber, value } = action.payload;
+         const columnNames = [
+            "name",
+            "type",
+            "electricityPower",
+            "thermalPower",
+            "powerGeneration",
+         ];
+         const columnName = columnNames[columnNumber];
+
+         state.turbines[rowNumber] = {
+            ...state.turbines[rowNumber],
+            [columnName]: columnNumber >= 2 ? +value : value, // 1 -й и 2- й столбцы - строки
+         };
       },
       setBoilerValue: (state, action: PayloadAction<setTableValuePayload>) => {
-         switch (action.payload.columnNumber) {
-            case 0:
-               state.boilers[action.payload.rowNumber] = {
-                  ...state.boilers[action.payload.rowNumber],
-                  name: String(action.payload.value),
-               };
-               break;
-            case 1:
-               state.boilers[action.payload.rowNumber] = {
-                  ...state.boilers[action.payload.rowNumber],
-                  type: String(action.payload.value),
-               };
-               break;
-            case 2:
-               state.boilers[action.payload.rowNumber] = {
-                  ...state.boilers[action.payload.rowNumber],
-                  perfomance: action.payload.value,
-               };
-               break;
-            case 3:
-               state.boilers[action.payload.rowNumber] = {
-                  ...state.boilers[action.payload.rowNumber],
-                  numOfLaunches: action.payload.value,
-               };
-               break;
-            default:
-               break;
-         }
-      },
-      setBoilerName: (state, action: PayloadAction<setStringNamePayload>) => {
-         switch (action.payload.columnNumber) {
-            case 0:
-               state.boilers[action.payload.index] = {
-                  ...state.boilers[action.payload.index],
-                  name: action.payload.value,
-               };
-               break;
-            case 1:
-               state.boilers[action.payload.index] = {
-                  ...state.boilers[action.payload.index],
-                  type: action.payload.value,
-               };
-               break;
-            default:
-               break;
-         }
+         const { columnNumber, rowNumber, value } = action.payload;
+         const columnNames = ["name", "type", "perfomance", "numOfLaunches"];
+         const columnName = columnNames[columnNumber];
+
+         state.boilers[rowNumber] = {
+            ...state.boilers[rowNumber],
+            [columnName]: columnNumber >= 2 ? +value : value, // 1 -й и 2- й столбцы - строки,
+         };
       },
    },
 });
 
-export const {
-   setMonthsTableValue,
-   setTurbineValue,
-   setBoilerValue,
-   setTurbineName,
-   setBoilerName,
-} = yearTaskSlice.actions;
+export const { setMonthsTableValue, setTurbineValue, setBoilerValue } = yearTaskSlice.actions;
 
 export default yearTaskSlice.reducer;
