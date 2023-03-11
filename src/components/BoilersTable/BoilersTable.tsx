@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { header } from "../../data/boilersTableData";
-import TableInput from "../TableCell/TableCell";
+import TableInput from "../tableCell/TableCell";
 
 const BoilersTable = () => {
    const [rowNumber, setRowsNumber] = useState(1);

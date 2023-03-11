@@ -1,11 +1,11 @@
 import { header, months } from "../../data/moutnTableData";
-import TableInput from "../TableCell/TableCell";
+import TableInput from "../tableCell/TableCell";
 
 const MounthTable = () => {
    const renderRow = (rowNumber: number, columnsNumber: number) => {
       const row = [];
 
-      for (let i = 1; i < columnsNumber; i++) {
+      for (let i = 0; i < columnsNumber - 1; i++) {
          row.push(<TableInput key={i} rowNumber={rowNumber} columnNumber={i} tableName="months" />);
       }
 
