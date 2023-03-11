@@ -13,6 +13,8 @@ const TurbineCard: FC<TurbineCardProps> = ({turbine}) => {
                <b>{turbine.name}, марка турбины: {turbine.type}</b>
             </h4>
             <p>Установленная электрическая мощность: {turbine.electricityPower} МВТ</p>
+            <p>Тепловая мощность: {turbine.thermalPower} Гкал/час</p>
+            <p>Выработка электроэнергии: {turbine.electricityPower} т/ч</p>
          </div>
       </div>
    );

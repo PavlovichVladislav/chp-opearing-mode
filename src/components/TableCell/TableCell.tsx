@@ -6,13 +6,13 @@ import {
    setTurbineValue,
 } from "../../store/slices/yearTaskSlice";
 
-interface TableInputProps {
+interface TableCellProps {
    rowNumber: number;
    columnNumber: number;
    tableName: string;
 }
 
-const TableInput: FC<TableInputProps> = ({ rowNumber, columnNumber, tableName }) => {
+const TableCell: FC<TableCellProps> = ({ rowNumber, columnNumber, tableName }) => {
    const [value, setValue] = useState("");
    const dispatch = useDispatch();
 
@@ -53,11 +53,13 @@ const TableInput: FC<TableInputProps> = ({ rowNumber, columnNumber, tableName })
    }, [value]);
 
    return (
-      <input
-         value={value}
-         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-      />
+      <td>
+         <input
+            value={value}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+         />
+      </td>
    );
 };
 
-export default TableInput;
+export default TableCell;

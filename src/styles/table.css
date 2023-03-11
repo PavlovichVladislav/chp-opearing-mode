@@ -34,7 +34,7 @@
 .table input {
    padding: 0;
    padding: 5px 10px;
-   width: calc(100% - 22px);
+   width: calc(100% - 20px);
    height: 20px;
    outline: 0;
    border: none;
@@ -44,6 +44,6 @@
    background: #ffffff;
 }
 
-.table td:has(input:focus) {
-   border: 1px solid #1874cf;
+.table input:focus {
+   outline: 1px solid #1874cf;
 }

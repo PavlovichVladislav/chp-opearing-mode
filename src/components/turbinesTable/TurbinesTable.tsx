@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { header } from "../../data/turbinesTableData";
-import TableInput from "../TableInput/TableInput";
+import TableInput from "../TableCell/TableCell";
 
 const TurbinesTable = () => {
    const [rowsNumber, setRowsNumber] = useState(1);
@@ -24,9 +24,7 @@ const TurbinesTable = () => {
 
       for (let i = 0; i < columnsNumber; i++) {
          row.push(
-            <td key={i}>
-               <TableInput rowNumber={rowNumber} columnNumber={i} tableName="turbines" />
-            </td>
+            <TableInput key={i} rowNumber={rowNumber} columnNumber={i} tableName="turbines" />
          );
       }
 

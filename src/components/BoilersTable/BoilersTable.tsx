@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { header } from "../../data/boilersTableData";
-import TableInput from "../TableInput/TableInput";
+import TableInput from "../TableCell/TableCell";
 
 const BoilersTable = () => {
    const [rowNumber, setRowsNumber] = useState(1);
@@ -24,9 +24,7 @@ const BoilersTable = () => {
 
       for (let i = 0; i < columnsNumber; i++) {
          row.push(
-            <td key={i}>
-               <TableInput rowNumber={rowNumber} columnNumber={i} tableName="boilers" />
-            </td>
+            <TableInput key={i} rowNumber={rowNumber} columnNumber={i} tableName="boilers" />
          );
       }
 

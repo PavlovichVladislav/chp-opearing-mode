@@ -11,7 +11,7 @@ import {
 } from "./data/seasons";
 
 import EquipmentCard from "./components/equipmentCard/EquipmentCard";
-import TurbineCard from "./components/equipmentCard/Turbine.Card";
+import TurbineCard from "./components/equipmentCard/TurbineCard";
 import Header from "./components/header/Header";
 import MounthTable from "./components/mounthTable/MounthTable";
 import TurbinesTable from "./components/turbinesTable/TurbinesTable";
@@ -247,19 +247,19 @@ const App: FC = () => {
                      <h2 className="subtitle">Зима</h2>
                   )}
                   {winterBoilerIndexes.map((index) => (
-                     <EquipmentCard boiler={boilers[index - 1]} />
+                     <EquipmentCard key={index} boiler={boilers[index - 1]} />
                   ))}
                   {summberBoilerIndexes.length > 0 && (
                      <h2 className="subtitle">Лето</h2>
                   )}
                   {summberBoilerIndexes.map((index) => (
-                     <EquipmentCard boiler={boilers[index - 1]} />
+                     <EquipmentCard key={index} boiler={boilers[index - 1]} />
                   ))}
                   {offSeasonBoilerIndexes.length > 0 && (
                      <h2 className="subtitle">Межсезонье</h2>
                   )}
                   {offSeasonBoilerIndexes.map((index) => (
-                     <EquipmentCard boiler={boilers[index - 1]} />
+                     <EquipmentCard key={index} boiler={boilers[index - 1]} />
                   ))}
                </div>
                <div className="turbines">
@@ -268,19 +268,19 @@ const App: FC = () => {
                      <h2 className="subtitle">Зима</h2>
                   )}
                   {winterTurbineIndexes.map((index) => (
-                     <TurbineCard turbine={turbines[index - 1]} />
+                     <TurbineCard key={index} turbine={turbines[index - 1]} />
                   ))}
                   {summberTurbineIndexes.length > 0 && (
                      <h2 className="subtitle">Лето</h2>
                   )}
                   {summberTurbineIndexes.map((index) => (
-                     <TurbineCard turbine={turbines[index - 1]} />
+                     <TurbineCard key={index} turbine={turbines[index - 1]} />
                   ))}
                   {offSeasonTurbineIndexes.length > 0 && (
                      <h2 className="subtitle">Межсезонье</h2>
                   )}
                   {offSeasonTurbineIndexes.map((index) => (
-                     <TurbineCard turbine={turbines[index - 1]} />
+                     <TurbineCard key={index} turbine={turbines[index - 1]} />
                   ))}
                </div>
             </div>

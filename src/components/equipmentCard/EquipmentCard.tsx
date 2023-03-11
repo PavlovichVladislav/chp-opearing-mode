@@ -13,6 +13,7 @@ const EquipmentCard: FC<EquipmentCardProps> = ({boiler}) => {
                <b>{boiler.name}, марка котла: {boiler.type}</b>
             </h4>
             <p>Теплопроизводительность: {boiler.perfomance} т/ч</p>
+            <p>Число пусков с начала эксплуатации: {boiler.perfomance}</p>
          </div>
       </div>
    );

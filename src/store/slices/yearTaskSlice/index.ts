@@ -1,19 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { PayloadAction } from "@reduxjs/toolkit";
+
 import { setTableValuePayload, YearTaskState } from "./types";
-import { ITaskItem, IBoiler, ITurbine } from "../../../models/tableDataModels";
 
 const initialState: YearTaskState = {
-   monthsTableData: Array(12).map(function () {
-      return {} as ITaskItem;
-   }),
-   turbines: Array(1).map(function () {
-      return {} as ITurbine;
-   }),
-   boilers: Array(1).map(function () {
-      return {} as IBoiler;
-   }),
+   monthsTableData: [],
+   turbines: [],
+   boilers: [],
 };
 
 export const yearTaskSlice = createSlice({
