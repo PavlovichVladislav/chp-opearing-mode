@@ -3,115 +3,131 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 import { offSeasonMonthNumbers, summerMonthNumbers, winterMonthNumbers } from "../../data/seasons";
 import { TurbineCard, EquipmentCard } from "../index";
+import { IBoiler, ITurbine } from "../../models/tableDataModels";
 
 const Equipment = () => {
    const { monthsTableData, boilers, turbines } = useTypedSelector((state) => state.yearTaskSlice);
 
-   const [winterBoilerIndexes, setWinterBoilerIndexes] = useState<number[]>([]);
-   const [summberBoilerIndexes, setSummberBoilerIndexes] = useState<number[]>([]);
-   const [offSeasonBoilerIndexes, setOffSeasonBoilerIndexes] = useState<number[]>([]);
+   const [winterBoilers, setWinterBoilers] = useState<IBoiler[]>([]);
+   const [summberBoilers, setSummberBoilers] = useState<IBoiler[]>([]);
+   const [offSeasonBoilers, setOffSeasonBoilers] = useState<IBoiler[]>([]);
 
-   const [winterTurbineIndexes, setWinterTurbineIndexes] = useState<number[]>([]);
-   const [summberTurbineIndexes, setSummberTurbineIndexes] = useState<number[]>([]);
-   const [offSeasonTurbineIndexes, setOffSeasonTurbineIndexes] = useState<number[]>([]);
+   const [winterTurbines, setWinterTurbines] = useState<ITurbine[]>([]);
+   const [summberTurbines, setSummberTurbines] = useState<ITurbine[]>([]);
+   const [offSeasonTurbines, setOffSeasonTurbines] = useState<ITurbine[]>([]);
 
-   const selectionOfEquipment = (
-      equipmentAmount: number,
-      averageValue: number,
-      equipmentPropName: string
-   ) => {
-      const start = Number("1" + Array(equipmentAmount).join("0"));
-      const end = start * 10 - 1;
+   // метод ниже считает возможные комбинации оборудования, согласно теории верроятности это называетя
+   // число сочтениай из n объектов(оборудование) по k, где k - amount, количество оборудования в сочетании
+   // алгоритм работает рекурсивно
 
-      let result: number[] = [];
-      let minDif = Infinity;
+   const getPossibleCombinations = (equipmentList: (ITurbine | IBoiler)[], amount: number) => {
+      if (amount === 1) {
+         return equipmentList.map((e) => [e]);
+      }
 
-      for (let i = start; i < end; i++) {
-         const set = new Set();
-         const equipmentNumbers = ("" + i).split("").map(Number);
-         equipmentNumbers.forEach((item) => set.add(item));
+      const combinations = [];
 
-         if (set.size === equipmentAmount) {
-            let curSum = 0;
+      for (let i = 0; i <= equipmentList.length - amount; i++) {
+         const first = equipmentList[i];
+         const rest = equipmentList.slice(i + 1);
+         const subCombinations: (ITurbine | IBoiler)[][] = getPossibleCombinations(
+            rest,
+            amount - 1
+         );
 
-            equipmentNumbers.forEach((item) => {
-               if (equipmentPropName === "turbines" && turbines[item - 1]) {
-                  curSum += turbines[item - 1].electricityPower;
-               }
+         for (const subCombination of subCombinations) {
+            combinations.push([first, ...subCombination]);
+         }
+      }
 
-               if (equipmentPropName === "boilers" && boilers[item - 1]) {
-                  curSum += boilers[item - 1].perfomance;
-               }
-            });
+      return combinations;
+   };
 
-            if (curSum >= averageValue) {
-               let curDif = Math.abs(curSum - averageValue);
+   function getMostAdvantageousComposition(
+      equipmentList: (ITurbine | IBoiler)[],
+      requiredHeatOutput: number,
+      equipmentName: "boilers" | "turbines"
+   ) {
+      let bestComposition: (ITurbine | IBoiler)[] = [];
+      let minExcess = Infinity;
 
-               if (curDif < minDif) {
-                  minDif = curDif;
-                  result = equipmentNumbers;
-               }
+      for (let i = 1; i <= equipmentList.length; i++) {
+         const combinations = getPossibleCombinations(equipmentList, i);
+
+         for (const combination of combinations) {
+            let totalHeatOutput = 0;
+
+            if (equipmentName === "boilers") {
+               totalHeatOutput = combination.reduce((sum, e: any) => sum + e.perfomance, 0);
+            }
+
+            if (equipmentName === "turbines") {
+               totalHeatOutput = combination.reduce((sum, e: any) => sum + e.electricityPower, 0);
+            }
+
+            const excess = totalHeatOutput - requiredHeatOutput;
+
+            if (excess >= 0 && excess < minExcess) {
+               bestComposition = combination;
+               minExcess = excess;
             }
          }
       }
 
-      if (isFinite(minDif)) {
-         return result;
-      }
+      return bestComposition;
+   }
 
-      return null;
-   };
-
-   const calcSeasonEquipment = (monthNumbers: number[], equipmentName: string) => {
-      let averagePerformance = 0;
+   const calcSeasonEquipmentt = (
+      seaonsMounthNumbers: number[],
+      equipmentList: (ITurbine | IBoiler)[],
+      equipmentName: "boilers" | "turbines"
+   ) => {
+      // среднее значение параметра - это средняя характеристика, которую мы преследуем, когда ищем выгодную комбинацию оборудования
+      // в случае бойлеров - это теплопроизводительность, в случае турбин - выработка электроэнергии
+      let averageParameterValue = 0;
 
       if (equipmentName === "boilers") {
-         monthNumbers.forEach(
-            (number) => (averagePerformance += monthsTableData[number].heatOutput)
+         seaonsMounthNumbers.forEach(
+            (number) => (averageParameterValue += monthsTableData[number].heatOutput)
          );
       }
 
       if (equipmentName === "turbines") {
-         monthNumbers.forEach((number) => (averagePerformance += monthsTableData[number].power));
-      }
-
-      averagePerformance = averagePerformance / monthNumbers.length;
-
-      let equipmentCobmination: number[] | null = [];
-
-      for (let curEquipmentAmount = 1; curEquipmentAmount <= boilers.length; curEquipmentAmount++) {
-         equipmentCobmination = selectionOfEquipment(
-            curEquipmentAmount,
-            averagePerformance,
-            equipmentName
+         seaonsMounthNumbers.forEach(
+            (number) => (averageParameterValue += monthsTableData[number].power)
          );
-
-         if (equipmentCobmination) {
-            return equipmentCobmination;
-         }
       }
+
+      averageParameterValue = averageParameterValue / seaonsMounthNumbers.length;
+
+      const bestComposition = getMostAdvantageousComposition(
+         equipmentList,
+         averageParameterValue,
+         equipmentName
+      );
+      return bestComposition;
    };
 
    const calcBoilers = () => {
-      const winterBoilers = calcSeasonEquipment(winterMonthNumbers, "boilers");
-      if (winterBoilers) setWinterBoilerIndexes(winterBoilers);
+      const winterBoilers = calcSeasonEquipmentt(winterMonthNumbers, boilers, "boilers");
+      setWinterBoilers(winterBoilers as IBoiler[]);
 
-      const summerBoilers = calcSeasonEquipment(summerMonthNumbers, "boilers");
-      if (summerBoilers) setSummberBoilerIndexes(summerBoilers);
+      const summerBoilers = calcSeasonEquipmentt(summerMonthNumbers, boilers, "boilers");
+      setSummberBoilers(summerBoilers as IBoiler[]);
 
-      const offSeasonBoilers = calcSeasonEquipment(offSeasonMonthNumbers, "boilers");
-      if (offSeasonBoilers) setOffSeasonBoilerIndexes(offSeasonBoilers);
+      const offSeasonBoilers = calcSeasonEquipmentt(offSeasonMonthNumbers, boilers, "boilers");
+      setOffSeasonBoilers(offSeasonBoilers as IBoiler[]);
    };
 
    const calcTurbines = () => {
-      const winterTurbines = calcSeasonEquipment(winterMonthNumbers, "turbines");
-      if (winterTurbines) setWinterTurbineIndexes(winterTurbines);
+      const winterTurbines = calcSeasonEquipmentt(winterMonthNumbers, turbines, "turbines");
+      setWinterTurbines(winterTurbines as ITurbine[]);
 
-      const summerTurbines = calcSeasonEquipment(summerMonthNumbers, "turbines");
-      if (summerTurbines) setSummberTurbineIndexes(summerTurbines);
+      const summerTurbines = calcSeasonEquipmentt(winterMonthNumbers, turbines, "turbines");
+      setSummberTurbines(summerTurbines as ITurbine[]);
 
-      const offSeasonTurbines = calcSeasonEquipment(offSeasonMonthNumbers, "turbines");
-      if (offSeasonTurbines) setOffSeasonTurbineIndexes(offSeasonTurbines);
+      const offSeasonTurbines = calcSeasonEquipmentt(winterMonthNumbers, turbines, "turbines");
+      setOffSeasonTurbines(offSeasonTurbines as ITurbine[]);
    };
 
    const calcEquipment = () => {
@@ -119,23 +135,27 @@ const Equipment = () => {
       calcTurbines();
    };
 
-   const renderBoilers = (indexes: number[]) => {
+   const renderBoilers = (equipment: IBoiler[]) => {
+      if (!equipment.length) return null;
+
       return (
          <>
-            {indexes.length > 0 && <h2 className="subtitle">Зима</h2>}
-            {indexes.map((index) => (
-               <EquipmentCard key={index} boiler={boilers[index - 1]} />
+            {<h2 className="subtitle">Зима</h2>}
+            {equipment.map((item) => (
+               <EquipmentCard key={item.name} boiler={item} />
             ))}
          </>
       );
    };
 
-   const renderTurbines = (indexes: number[]) => {
+   const renderTurbines = (equipment: ITurbine[]) => {
+      if (!equipment.length) return null;
+
       return (
          <>
-            {indexes.length > 0 && <h2 className="subtitle">Зима</h2>}
-            {indexes.map((index) => (
-               <TurbineCard key={index} turbine={turbines[index - 1]} />
+            {<h2 className="subtitle">Зима</h2>}
+            {equipment.map((item) => (
+               <TurbineCard key={item.name} turbine={item} />
             ))}
          </>
       );
@@ -150,15 +170,15 @@ const Equipment = () => {
          <div className="equipmentWrapper">
             <div className="boilers">
                <h2 className="title">Котлы</h2>
-               {renderBoilers(winterBoilerIndexes)}
-               {renderBoilers(summberBoilerIndexes)}
-               {renderBoilers(offSeasonBoilerIndexes)}
+               {renderBoilers(winterBoilers)}
+               {renderBoilers(summberBoilers)}
+               {renderBoilers(offSeasonBoilers)}
             </div>
             <div className="turbines">
                <h2 className="title">Турбины</h2>
-               {renderTurbines(winterTurbineIndexes)}
-               {renderTurbines(summberTurbineIndexes)}
-               {renderTurbines(offSeasonTurbineIndexes)}
+               {renderTurbines(winterTurbines)}
+               {renderTurbines(summberTurbines)}
+               {renderTurbines(offSeasonTurbines)}
             </div>
          </div>
       </>
@@ -166,71 +186,3 @@ const Equipment = () => {
 };
 
 export default Equipment;
-
-// function getMostAdvantageousComposition(equipmentList: any[], requiredHeatOutput: number) {
-//    let bestComposition = null;
-//    let minExcess = Infinity;
-   
-//    for (let i = 1; i <= equipmentList.length; i++) {
-//      const combinations = getCombinations(equipmentList, i);
-     
-//      for (const combination of combinations) {
-//        const totalHeatOutput = combination.reduce((sum, e) => sum + e.heatOutput, 0);
-//        const excess = totalHeatOutput - requiredHeatOutput;
-       
-//        if (excess >= 0 && excess < minExcess) {
-//          bestComposition = combination;
-//          minExcess = excess;
-//        }
-//      }
-//    }
-   
-//    return bestComposition;
-//  }
- 
-//  function getCombinations(equipmentList: any[], size: number) {
-//    if (size === 1) {
-//      return equipmentList.map(e => [e]);
-//    }
-   
-//    const combinations = [];
-   
-//    for (let i = 0; i <= equipmentList.length - size; i++) {
-//      const first = equipmentList[i];
-//      const rest = equipmentList.slice(i + 1);
-//      const subCombinations: any[] = getCombinations(rest, size - 1);
-     
-//      for (const subCombination of subCombinations) {
-//        combinations.push([first, ...subCombination]);
-//      }
-//    }
-   
-//    return combinations;
-//  }
-
-// let equipment = [
-//    { name: "Equipment A", heatOutput: 150 },
-//    { name: "Equipment B", heatOutput: 170 },
-//    { name: "Equipment C", heatOutput: 170 },
-//    { name: "Equipment D", heatOutput: 170 },
-//    { name: "Equipment E", heatOutput: 420 },
-//    { name: "Equipment F", heatOutput: 420 },
-//    { name: "Equipment G", heatOutput: 420 },
-//    { name: "Equipment H", heatOutput: 420 },
-// ];
-// let seasonHeatOutput = 350;
-
-// // let equipment = [
-// //    { name: "Equipment A", heatOutput: 150 },
-// //    { name: "Equipment B", heatOutput: 170 },
-// //    { name: "Equipment C", heatOutput: 170 },
-// //    { name: "Equipment D", heatOutput: 170 },
-// //    { name: "Equipment E", heatOutput: 420 },
-// //    { name: "Equipment F", heatOutput: 420 },
-// //    { name: "Equipment G", heatOutput: 420 },
-// //    { name: "Equipment H", heatOutput: 420 },
-// // ];
-// // let seasonHeatOutput = 392;
-
-// let optimalEquipment = getMostAdvantageousComposition(equipment, seasonHeatOutput);
-// console.log(optimalEquipment);
