@@ -16,7 +16,7 @@ const Equipment = () => {
    const [summberTurbines, setSummberTurbines] = useState<ITurbine[]>([]);
    const [offSeasonTurbines, setOffSeasonTurbines] = useState<ITurbine[]>([]);
 
-   // метод ниже считает возможные комбинации оборудования, согласно теории верроятности это называетя
+   // метод ниже считает возможные комбинации оборудования, согласно теории верроятности это называетcя -
    // число сочтениай из n объектов(оборудование) по k, где k - amount, количество оборудования в сочетании
    // алгоритм работает рекурсивно
 
@@ -45,8 +45,7 @@ const Equipment = () => {
 
    function getMostAdvantageousComposition(
       equipmentList: (ITurbine | IBoiler)[],
-      requiredHeatOutput: number,
-      equipmentName: "boilers" | "turbines"
+      requiredHeatOutput: number
    ) {
       let bestComposition: (ITurbine | IBoiler)[] = [];
       let minExcess = Infinity;
@@ -57,13 +56,17 @@ const Equipment = () => {
          for (const combination of combinations) {
             let totalHeatOutput = 0;
 
-            if (equipmentName === "boilers") {
-               totalHeatOutput = combination.reduce((sum, e: any) => sum + e.perfomance, 0);
-            }
+            // для выявления оптимальной комбинации оборудования, необходимо вычислить
+            // его суммарную производительность, для этого устанавливаются type guards, 
+            // которые проверяют, какую характеристику нужно прибавлять к счётчику
+            // если в функцию пришёл массив бойлеров, то функция будет работать как с болейрами
+            // и прибавлять perfomance
+            totalHeatOutput = combination.reduce((sum, e: IBoiler | ITurbine) => {
+               if ("perfomance" in e) sum += e.perfomance;
+               if ("electricityPower" in e) sum += e.electricityPower;
 
-            if (equipmentName === "turbines") {
-               totalHeatOutput = combination.reduce((sum, e: any) => sum + e.electricityPower, 0);
-            }
+               return sum;
+            }, 0);
 
             const excess = totalHeatOutput - requiredHeatOutput;
 
@@ -100,11 +103,7 @@ const Equipment = () => {
 
       averageParameterValue = averageParameterValue / seaonsMounthNumbers.length;
 
-      const bestComposition = getMostAdvantageousComposition(
-         equipmentList,
-         averageParameterValue,
-         equipmentName
-      );
+      const bestComposition = getMostAdvantageousComposition(equipmentList, averageParameterValue);
       return bestComposition;
    };
 
@@ -186,3 +185,5 @@ const Equipment = () => {
 };
 
 export default Equipment;
+
+
