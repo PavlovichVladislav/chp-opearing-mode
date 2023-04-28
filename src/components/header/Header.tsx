@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
    return (
@@ -7,8 +8,8 @@ const Header = () => {
             <div className="container">
                <div className="header__wrapper">
                   <div className="header__btns">
-                     <a href="#" className="link active">Опт. состав оборудования</a>
-                     <a href="#" className="link">ХОП</a>
+                     <Link className="link" to={'/'}>Опт. состав оборудования</Link>
+                     <Link className="link" to={'fuelConsumption'}>ХОП</Link>
                      <a href="#" className="link">Предельные издержки</a>
                      <a href="#" className="link">Предельные доходы станции</a>
                      <a href="#" className="link">Опт. электрические мощности</a>

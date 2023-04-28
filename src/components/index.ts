@@ -5,7 +5,7 @@ import TableCell from "./tableCell/TableCell";
 import Header from "./header/Header";
 import EquipmentCard from "./equipmentCard/EquipmentCard";
 import TurbineCard from "./equipmentCard/TurbineCard";
-import Equipment from "./equipment/Equipment";
+import EquipmentList from "./equipment/EquipmentList";
 
 export {
    BoilersTable,
@@ -15,5 +15,5 @@ export {
    Header,
    EquipmentCard,
    TurbineCard,
-   Equipment,
+   EquipmentList,
 };

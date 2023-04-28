@@ -5,7 +5,7 @@ import { offSeasonMonthNumbers, summerMonthNumbers, winterMonthNumbers } from ".
 import { TurbineCard, EquipmentCard } from "../index";
 import { IBoiler, ITurbine } from "../../models/tableDataModels";
 
-const Equipment = () => {
+const EquipmentList = () => {
    const { monthsTableData, boilers, turbines } = useTypedSelector((state) => state.yearTaskSlice);
 
    const [winterBoilers, setWinterBoilers] = useState<IBoiler[]>([]);
@@ -184,6 +184,5 @@ const Equipment = () => {
    );
 };
 
-export default Equipment;
-
+export default EquipmentList;
 
