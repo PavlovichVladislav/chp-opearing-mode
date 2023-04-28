@@ -65,9 +65,10 @@ const calcBoilerFuelConsumption = (relativeHeatLosses: number[], payload: number
    const result = [];
 
    for (let i = 0; i < relativeHeatLosses.length; i++) {
-      const value = 1 + relativeHeatLosses[i] / (payload[i + 1] - payload[i]);
+    //   const value = 1 + relativeHeatLosses[i] / (payload[i + 1] - payload[i]);
+      const value = 1 + relativeHeatLosses[i];
 
-      result.push(value * 0.143);
+      result.push(value * 0.1429);
    }
 
    return result;
@@ -80,7 +81,7 @@ const FuelConsumption = () => {
    const heatLoss = calcHeatLoss(payload, efficiency);
    const averageLoadsValue = calcAverageLoadsValue(load);
    const absoluteIncrsHeatLosses = calcAbsHeatLosses(heatLoss);
-   const relativeIncrsHeatLosses = calcRelativeHeatLosses(absoluteIncrsHeatLosses, load);
+   const relativeIncrsHeatLosses = calcRelativeHeatLosses(absoluteIncrsHeatLosses, payload);
    const boilerFuelConsumption = calcBoilerFuelConsumption(relativeIncrsHeatLosses, payload);
 
    console.log(boilerFuelConsumption);
